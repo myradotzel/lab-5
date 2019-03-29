@@ -1,15 +1,25 @@
 <?php
-$postsDB = new mysqli("database_URL", "m765d813", "Aepe4ne9", "Posts");
+$DB = new mysqli("mysql.eecs.ku.edu", "m765d813", "Aepe4ne9", "m765d813");
 
-$num_posts = "SELECT COUNT(post_id) FROM Posts";
-for ($i=0; $i<$num_posts; $i++)
-{
-    $user = "SELECT * FROM Users LIMIT " . $i . ",1";
-    echo "<option value=" . $user . ">" . $user . "</option>";
+$myUser = $_POST["user"];
+
+echo "<h1>Posts from " . $myUser . "</h1>";
+
+$query = "SELECT * FROM Posts WHERE author_id = '$myUser';";
+
+if ($result = $DB->query($query)) {
+	echo "<table>";
+	while ($row = $result->fetch_assoc())
+	{
+	    echo "<tr><td>" . $row["post_id"] . "</td><td>" . $row["content"] . "</td><td>" . $row["author_id"] . "</td></tr>";
+	}
+	echo "</table>";
+
+	$result->free();
+}
+else {
+	echo "Error executing SQL query";
 }
 
-<option value="saab">Saab</option>
-<option value="mercedes">Mercedes</option>
-<option value="audi">Audi</option>
-
+$DB->close();
 ?>

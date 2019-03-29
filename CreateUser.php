@@ -1,23 +1,23 @@
 <?php
-$usersDB = new mysqli("https://people.eecs.ku.edu/~m765d813", "m765d813", "Aepe4ne9", "Posts");
+$DB = new mysqli("mysql.eecs.ku.edu", "m765d813", "Aepe4ne9", "m765d813");
 
-if ($mysqli->connect_errno) {
-    printf("Connect failed: %s\n", $mysqli->connect_error);
+if ($DB->connect_errno) {
+    printf("Connect failed: %s\n", $DB->connect_error);
     exit();
 }
 
 $username = $_POST["username"];
 
-if ($usersDB->query($username)) //add new post to Posts table database
+$sql = "INSERT INTO Users (user_id) VALUES (\"$username\");";
+
+if ($DB->query($sql) === TRUE)
 {
-    echo "User already exists";
+    echo "New record created successfully";
+}
+else
+{
+    echo "Error: " . $sql . "<br>" . $DB->error;
 }
 
-else if ($username != NULL) //add to new user to Users table database
-{
-    $sql = "INSERT INTO Users (user_id) VALUES ($username)";
-    echo "User has been successfully added";
-}
-
-$usersDB->close();
+$DB->close();
 ?>
